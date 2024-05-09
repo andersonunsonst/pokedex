@@ -7,9 +7,11 @@ import 'package:flutter/foundation.dart';
 
 class Pokemons {
   final String? name;
+  final String? imagemUrl;
 
   Pokemons({
     this.name,
+    this.imagemUrl
   });
 }
 
@@ -43,10 +45,14 @@ class _PokelistState extends State<Pokelist> {
     var json = jsonDecode(response.body.toString());
 
     if (response.statusCode == 200) {
-
+      int imgIndex =1;
       for(Map i in json['results']){
-          Pokemons pokemons = Pokemons(name: i['name']);
+          Pokemons pokemons = Pokemons(
+            name: i['name'],
+            imagemUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/diamond-pearl/$imgIndex.png",
+            );
           listaPokemons.add(pokemons);
+          imgIndex= imgIndex+1;
       }
       
       todosPokemons = listaPokemons;
@@ -78,25 +84,6 @@ class _PokelistState extends State<Pokelist> {
 
   @override
   Widget build(BuildContext context) {
-    // final poke = fetchPoke();
-    // poke.asStream();
-    // return ElevatedButton(onPressed: fetchPoke, child: Text('click'));
-
-    // return GridView.builder(
-    //   // itemCount: poke.,
-    //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    //     crossAxisCount: 3
-    //   ),
-    //   itemCount: pokedex.length,
-    //   itemBuilder: (BuildContext context, int index){
-
-    //     return Card(
-    //       color: Colors.amber,
-    //       child: Center(child: Text("$pokedex[$index]['name']")),
-
-    //     );
-    //   }
-    // );
 
     return Scaffold(
         appBar: AppBar(title: const Text('Pokedex')),
@@ -134,7 +121,7 @@ class _PokelistState extends State<Pokelist> {
                                     // child: Text(listaPokemons[index].name.toString()),
                                     child: Column(
                                       children: [
-                                        Image.network("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/diamond-pearl/$imgIndex.png"),
+                                        Image.network(listaPokemons[index].imagemUrl.toString()),
                                         Text(listaPokemons[index].name.toString()),
                                       ]),
                                 ));
